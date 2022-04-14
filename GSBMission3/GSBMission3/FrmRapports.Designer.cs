@@ -37,6 +37,7 @@ namespace GSBMission3
             this.bdgRapport = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.XMLbtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.bdgVisiteurs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bdgRapport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -98,11 +99,22 @@ namespace GSBMission3
             this.comboBox1.TabIndex = 27;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
+            // XMLbtn
+            // 
+            this.XMLbtn.Location = new System.Drawing.Point(632, 413);
+            this.XMLbtn.Name = "XMLbtn";
+            this.XMLbtn.Size = new System.Drawing.Size(75, 25);
+            this.XMLbtn.TabIndex = 28;
+            this.XMLbtn.Text = "XML";
+            this.XMLbtn.UseVisualStyleBackColor = true;
+            this.XMLbtn.Click += new System.EventHandler(this.XMLbtn_Click);
+            // 
             // FrmRapports
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.XMLbtn);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.lblSentence);
@@ -127,5 +139,6 @@ namespace GSBMission3
         private System.Windows.Forms.Label lblSentence;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button XMLbtn;
     }
 }

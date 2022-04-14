@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Xml;
 
 namespace GSBMission3
 {
@@ -21,6 +23,7 @@ namespace GSBMission3
             this.bdgVisiteurs.DataSource = this.mesDonnees.visiteur.ToList();
             this.bdgRapport.DataSource = this.mesDonnees.rapport.ToList();
         }
+
         private void FrmRapports_Load(object sender, EventArgs e)
         {
             var n = (from v in this.mesDonnees.visiteur
@@ -52,20 +55,66 @@ namespace GSBMission3
             string[] subs = selectedItem.ToString().Split(' ');
             string nom = subs[0];
             string prenom = subs[1];
-            var test = from v in this.mesDonnees.visiteur
+            var rapports = from v in this.mesDonnees.visiteur
                        join r in this.mesDonnees.rapport on v.id equals r.idVisiteur
                        where v.nom == nom
                        where v.prenom == prenom
                        select r;
-            this.dataGridView1.DataSource = test.ToList();
+            this.dataGridView1.DataSource = rapports.ToList();
         }
 
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             visiteur v = new visiteur();
-
             v.nom = GetAllRapports();
             v.prenom = GetAllRapports();
+        }
+
+        private void XMLbtn_Click(object sender, EventArgs e)
+        {
+            DataTable dt = GetDataTableFromDGV(dataGridView1);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                XmlTextWriter xmlSave = new XmlTextWriter(saveFileDialog1.OpenFile(), Encoding.UTF8);
+                xmlSave.Formatting = Formatting.Indented;
+                ds.WriteXml(xmlSave);
+                xmlSave.Close();
+                MessageBox.Show("Le fichier XML contenant tous les rapports a été créé", "Succès", MessageBoxButtons.OK, MessageBoxIcon.None);
+            }
+            else
+            {
+                MessageBox.Show("L'export du rapport a été annulé", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private DataTable GetDataTableFromDGV(DataGridView dgv)
+        {
+            var dt = new DataTable();
+            foreach (DataGridViewColumn column in dgv.Columns)
+            {
+                if (column.Visible)
+                {
+                    dt.Columns.Add();
+                }
+            }
+            object[] cellValues = new object[dgv.Columns.Count];
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                for (int i = 0; i < row.Cells.Count; i++)
+                {
+                    cellValues[i] = row.Cells[i].Value;
+                }
+                dt.Rows.Add(cellValues);
+            }
+            return dt;
         }
     }
 }
